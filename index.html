@@ -17,20 +17,26 @@
 
 <form id="stockForm" class="space-y-5">
 
-<label class="block font-semibold">Ticker</label>
+<div>
+<label class="block mb-2 font-semibold">Ticker</label>
 <input type="text" id="ticker" placeholder="לדוגמה: AAPL"
 class="w-full border rounded-xl p-3" required>
+</div>
 
-<label class="block font-semibold">תאריך התחלה</label>
+<div>
+<label class="block mb-2 font-semibold">תאריך התחלה</label>
 <input type="date" id="startDate"
 class="w-full border rounded-xl p-3" required>
+</div>
 
-<label class="block font-semibold">תאריך סיום</label>
+<div>
+<label class="block mb-2 font-semibold">תאריך סיום</label>
 <input type="date" id="endDate"
 class="w-full border rounded-xl p-3" required>
+</div>
 
 <button type="submit" id="submitBtn"
-class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">
+class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">
 משוך נתונים
 </button>
 
@@ -40,23 +46,10 @@ class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">
 
 </div>
 
-<iframe name="hiddenFrame" style="display:none;"></iframe>
-
-<form id="hiddenPostForm"
-      action="https://script.google.com/macros/s/AKfycbwlq7mLj4-fndEfV6nGdN9eSQtgjHjPQWHfTtm2DmnXbLUnXmGa_HI8-4XXm0ktK047/exec"
-      method="POST"
-      target="hiddenFrame"
-      style="display:none;">
-      
-<input type="hidden" name="ticker" id="hiddenTicker">
-<input type="hidden" name="startDate" id="hiddenStartDate">
-<input type="hidden" name="endDate" id="hiddenEndDate">
-
-</form>
-
 <script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwlq7mLj4-fndEfV6nGdN9eSQtgjHjPQWHfTtm2DmnXbLUnXmGa_HI8-4XXm0ktK047/exec";
+
 const form = document.getElementById("stockForm");
-const hiddenForm = document.getElementById("hiddenPostForm");
 const resultDiv = document.getElementById("result");
 const btn = document.getElementById("submitBtn");
 
@@ -72,27 +65,30 @@ form.addEventListener("submit", function(e) {
         return;
     }
 
-    document.getElementById("hiddenTicker").value = ticker;
-    document.getElementById("hiddenStartDate").value = startDate;
-    document.getElementById("hiddenEndDate").value = endDate;
-
     btn.disabled = true;
     btn.innerText = "שולח בקשה...";
     resultDiv.innerHTML = "<span class='text-blue-600'>הבקשה נשלחת...</span>";
 
-    hiddenForm.submit();
+    const url =
+        WEB_APP_URL +
+        "?ticker=" + encodeURIComponent(ticker) +
+        "&startDate=" + encodeURIComponent(startDate) +
+        "&endDate=" + encodeURIComponent(endDate);
+
+    const img = new Image();
+    img.src = url;
 
     setTimeout(function() {
         resultDiv.innerHTML =
             `<span class='text-green-600'>
             הבקשה נשלחה.
             <br>
-            בדוק בגוגל שיטס אם נוצר גיליון בשם ${ticker}
+            בדוק אם נוצר גיליון בשם ${ticker}
             </span>`;
 
         btn.disabled = false;
         btn.innerText = "משוך נתונים";
-    }, 2500);
+    }, 3000);
 });
 </script>
 
