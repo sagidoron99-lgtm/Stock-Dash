@@ -75,7 +75,11 @@ form.addEventListener("submit", function(e) {
             "&startDate=" + encodeURIComponent(startDate) +
             "&endDate=" + encodeURIComponent(endDate);
         
-        window.open(url, "_blank");
+    fetch(url, {
+        method: "GET",
+        mode: "no-cors"
+    });
+    
     setTimeout(function() {
         resultDiv.innerHTML =
             `<span class='text-green-600'>
