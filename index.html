@@ -70,13 +70,12 @@ const form = document.getElementById("stockForm");
 const resultDiv = document.getElementById("result");
 const btn = document.getElementById("submitBtn");
 
-/* החלף לכתובת שלך */
 const YOUR_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwlq7mLj4-fndEfV6nGdN9eSQtgjHjPQWHfTtm2DmnXbLUnXmGa_HI8-4XXm0ktK047/exec";
 
 form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const ticker = document.getElementById("ticker").value.trim();
+    const ticker = document.getElementById("ticker").value.trim().toUpperCase();
     const startDate = document.getElementById("startDate").value;
     const endDate = document.getElementById("endDate").value;
 
@@ -87,15 +86,12 @@ form.addEventListener("submit", async function(e) {
 
     btn.disabled = true;
     btn.innerText = "טוען נתונים...";
-    resultDiv.innerHTML = "<span class='text-blue-600'>נא להמתין...</span>";
+    resultDiv.innerHTML = "<span class='text-blue-600'>שולח בקשה...</span>";
 
     try {
-
-        const response = await fetch(YOUR_WEB_APP_URL, {
+        await fetch(YOUR_WEB_APP_URL, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            mode: "no-cors",
             body: JSON.stringify({
                 ticker: ticker,
                 startDate: startDate,
@@ -103,29 +99,18 @@ form.addEventListener("submit", async function(e) {
             })
         });
 
-        const data = await response.json();
-
-        if (data.status === "success") {
-            resultDiv.innerHTML =
-                `<span class='text-green-600'>
-                הנתונים נשמרו בהצלחה בגליון ${ticker}
-                <br>
-                נוספו ${data.rowsInserted} שורות
-                </span>`;
-        } else {
-            resultDiv.innerHTML =
-                `<span class='text-red-600'>
-                שגיאה: ${data.message}
-                </span>`;
-        }
+        resultDiv.innerHTML =
+            `<span class='text-green-600'>
+            הבקשה נשלחה בהצלחה.
+            <br>
+            בדוק אם הנתונים נוספו לגיליון בשם ${ticker}
+            </span>`;
 
     } catch (error) {
-
         resultDiv.innerHTML =
             `<span class='text-red-600'>
             שגיאת חיבור לשרת
             </span>`;
-
     }
 
     btn.disabled = false;
