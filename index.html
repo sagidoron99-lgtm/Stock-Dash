@@ -70,14 +70,12 @@ form.addEventListener("submit", function(e) {
     resultDiv.innerHTML = "<span class='text-blue-600'>הבקשה נשלחת...</span>";
 
     const url =
-        WEB_APP_URL +
-        "?ticker=" + encodeURIComponent(ticker) +
-        "&startDate=" + encodeURIComponent(startDate) +
-        "&endDate=" + encodeURIComponent(endDate);
-
-    const img = new Image();
-    img.src = url;
-
+            WEB_APP_URL +
+            "?ticker=" + encodeURIComponent(ticker) +
+            "&startDate=" + encodeURIComponent(startDate) +
+            "&endDate=" + encodeURIComponent(endDate);
+        
+        window.open(url, "_blank");
     setTimeout(function() {
         resultDiv.innerHTML =
             `<span class='text-green-600'>
